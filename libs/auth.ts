@@ -1,40 +1,25 @@
 import axios from 'axios'
+import { Customer, Employee, User } from './types'
 
-type SignInRequestDataType = {
+export type SignInRequestDataType = {
   email: string
   password: string
 }
 
-export type User = {
-  id: number
+export type SignInRequestResponseType = {
+  token: string
+  user: User & { customer: Customer; employee: Employee }
+}
+
+export type SignUpRequestDataType = {
   email: string
   cpf: string
   name: string
   password: string
-  phone: string | null
-  createdAt: Date
-  updatedAt: Date
+  phone: string
 }
 
-export type Employee = {
-  id: number
-  registration: string
-  group: number
-  userId: number
-  createdAt: Date
-  updatedAt: Date
-}
-
-export type Customer = {
-  id: number
-  buysOnCredit: boolean
-  creditPayDate: number
-  userId: number
-  createdAt: Date
-  updatedAt: Date
-}
-
-type SignInRequestResponseType = {
+export type SignUpRequestResponseType = {
   token: string
   user: User & { customer: Customer; employee: Employee }
 }
@@ -51,6 +36,28 @@ export const signInRequest = async ({
   console.log(token)
 
   const user = await getUserInfo(token)
+  return { token, user }
+}
+
+export const signUpRequest = async (
+  signUpData: SignUpRequestDataType
+): Promise<SignUpRequestResponseType> => {
+  const tokenResponse = await axios.post('http://localhost:5000/auth/signup', {
+    ...signUpData,
+  })
+  const token = tokenResponse.data.access_token
+  console.log(token)
+
+  let user
+  user = await getUserInfo(token)
+  await await axios.post(
+    'http://localhost:5000/customers',
+    {
+      userId: user.id,
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  user = await getUserInfo(token)
   return { token, user }
 }
 

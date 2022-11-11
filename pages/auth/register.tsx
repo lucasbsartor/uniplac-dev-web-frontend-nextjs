@@ -8,12 +8,33 @@ import {
   Group,
   Button,
   Text,
+  Stack,
 } from '@mantine/core'
 import Link from 'next/link'
 import { NextPage } from 'next'
-import React from 'react'
+import React, { useContext, useState } from 'react'
+import { AuthContext } from '../../contexts/AuthContext'
 
 const RegisterPage: NextPage = () => {
+  const { signUp } = useContext(AuthContext)
+  const [email, setEmail] = useState('')
+  const [cpf, setCpf] = useState('')
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
+  const [phone, setPhone] = useState('')
+
+  const handleSubmit = () => {
+    const signUpData = {
+      email,
+      cpf,
+      name,
+      password,
+      phone,
+    }
+    console.log(signUpData)
+    signUp(signUpData)
+  }
+
   return (
     <div>
       <Container size={420} my={40}>
@@ -36,19 +57,43 @@ const RegisterPage: NextPage = () => {
         </Text>
 
         <Paper withBorder shadow='md' p={30} mt={30} radius='md'>
-          <TextInput label='Email' placeholder='seu@email.com' required />
-          <PasswordInput
-            label='Senha'
-            placeholder='Sua senha'
-            required
-            mt='md'
-          />
-          <PasswordInput
+          <Stack>
+            <TextInput
+              label='Email'
+              placeholder='seu@email.com'
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <TextInput
+              label='CPF'
+              placeholder='1234567890'
+              onChange={(e) => setCpf(e.target.value)}
+              required
+            />
+            <TextInput
+              label='Nome'
+              placeholder='Seu nome'
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+            <TextInput
+              label='Telefone'
+              placeholder='(xx) xxxxxxxxx'
+              onChange={(e) => setPhone(e.target.value)}
+              required
+            />
+            <PasswordInput
+              label='Senha'
+              placeholder='Sua senha'
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </Stack>
+          {/* <PasswordInput
             label='Confirme sua senha'
             placeholder='Repita a sua senha'
             required
-            mt='md'
-          />
+          /> */}
           <Group position='apart' mt='md'>
             {/* <Checkbox label='Manter conectado' /> */}
             <Anchor<'a'>
@@ -59,7 +104,7 @@ const RegisterPage: NextPage = () => {
               Esqueceu sua senha?
             </Anchor>
           </Group>
-          <Button fullWidth mt='xl'>
+          <Button fullWidth mt='xl' onClick={handleSubmit}>
             Criar
           </Button>
         </Paper>

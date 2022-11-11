@@ -10,7 +10,8 @@ import {
   Container,
 } from '@mantine/core'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { AuthContext } from '../../contexts/AuthContext'
 
 type LayoutShellProps = {
   children: React.ReactNode
@@ -19,6 +20,7 @@ type LayoutShellProps = {
 const LayoutShell = ({ children }: LayoutShellProps) => {
   const theme = useMantineTheme()
   const [opened, setOpened] = useState(false)
+  const { isAuthenticated, signOut } = useContext(AuthContext)
   return (
     <AppShell
       styles={{
@@ -32,14 +34,19 @@ const LayoutShell = ({ children }: LayoutShellProps) => {
       navbarOffsetBreakpoint='sm'
       asideOffsetBreakpoint='sm'
       navbar={
-        <Navbar
-          p='md'
-          hiddenBreakpoint='sm'
-          hidden={!opened}
-          width={{ sm: 200, lg: 300 }}
-        >
-          <Text>Application navbar</Text>
-        </Navbar>
+        isAuthenticated ? (
+          <Navbar
+            p='md'
+            hiddenBreakpoint='sm'
+            hidden={!opened}
+            width={{ sm: 200, lg: 300 }}
+          >
+            <Text>Application navbar</Text>
+            <Link href='/users' passHref>
+              <Button component='a'>Users</Button>
+            </Link>
+          </Navbar>
+        ) : undefined
       }
       header={
         <Header height={70} p='md'>
@@ -62,9 +69,13 @@ const LayoutShell = ({ children }: LayoutShellProps) => {
               </Button>
             </Link>
             <div style={{ flex: 1, flexGrow: 1 }} />
-            <Link href='/auth/login' passHref>
-              <Button component='a'>Login</Button>
-            </Link>
+            {isAuthenticated ? (
+              <Button onClick={() => signOut()}>Logout</Button>
+            ) : (
+              <Link href='/auth/login' passHref>
+                <Button component='a'>Login</Button>
+              </Link>
+            )}
           </div>
         </Header>
       }
