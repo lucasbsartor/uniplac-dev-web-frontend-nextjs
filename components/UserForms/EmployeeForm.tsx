@@ -30,7 +30,7 @@ const EmployeeForm = (props: EmployeeFormProps) => {
       const payload = { userId: props.userId, ...form.values }
       const { ['uniplacdevweb.token']: token } = parseCookies()
       await axios.patch(
-        `http://localhost:5000/employees/${props.employeeId}`,
+        `${process.env.NEXT_PUBLIC_API_URL_FRONT}/employees/${props.employeeId}`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       )

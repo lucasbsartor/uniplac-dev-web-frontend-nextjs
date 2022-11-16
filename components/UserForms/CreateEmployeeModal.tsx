@@ -28,9 +28,13 @@ const CreateEmployeeModal = (props: CreateEmployeeProps) => {
       const { ['uniplacdevweb.token']: token } = parseCookies()
 
       const payload = { ...form.values, userId: props.id }
-      await axios.post('http://localhost:5000/employees', payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL_FRONT}/employees`,
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       setLoading(true)
       await new Promise((r) => setTimeout(r, 5000))
       setLoading(false)
@@ -72,7 +76,9 @@ const CreateEmployeeModal = (props: CreateEmployeeProps) => {
         </form>
       </Modal>
 
-      <Button onClick={() => setOpened(true)}>Open Modal</Button>
+      <Button onClick={() => setOpened(true)}>
+        Transformar em funcionário
+      </Button>
     </div>
   )
 }

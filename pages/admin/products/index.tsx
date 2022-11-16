@@ -21,9 +21,12 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
       redirect: { destination: '/auth/login', permanent: false },
     }
   }
-  const productsResponse = await axios.get('http://localhost:5000/products', {
-    headers: { Authorization: `Bearer ${token}` },
-  })
+  const productsResponse = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/products`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  )
 
   const products: [Product] = productsResponse.data
 

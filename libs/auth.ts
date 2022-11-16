@@ -28,10 +28,13 @@ export const signInRequest = async ({
   email,
   password,
 }: SignInRequestDataType): Promise<SignInRequestResponseType> => {
-  const tokenResponse = await axios.post('http://localhost:5000/auth/signin', {
-    email,
-    password,
-  })
+  const tokenResponse = await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL_FRONT}/auth/signin`,
+    {
+      email,
+      password,
+    }
+  )
   const token = tokenResponse.data.access_token
   console.log(token)
 
@@ -42,16 +45,19 @@ export const signInRequest = async ({
 export const signUpRequest = async (
   signUpData: SignUpRequestDataType
 ): Promise<SignUpRequestResponseType> => {
-  const tokenResponse = await axios.post('http://localhost:5000/auth/signup', {
-    ...signUpData,
-  })
+  const tokenResponse = await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL_FRONT}/auth/signup`,
+    {
+      ...signUpData,
+    }
+  )
   const token = tokenResponse.data.access_token
   console.log(token)
 
   let user
   user = await getUserInfo(token)
-  await await axios.post(
-    'http://localhost:5000/customers',
+  await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL_FRONT}/customers`,
     {
       userId: user.id,
     },
@@ -64,9 +70,12 @@ export const signUpRequest = async (
 export const getUserInfo = async (
   token: string
 ): Promise<User & { customer: Customer; employee: Employee }> => {
-  const userResponse = await axios.get('http://localhost:5000/users/me', {
-    headers: { Authorization: `Bearer ${token}` },
-  })
+  const userResponse = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL_FRONT}/users/me`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  )
   const user = userResponse.data
   return user
 }

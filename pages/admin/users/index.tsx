@@ -1,7 +1,8 @@
-import { Paper, Table, Title } from '@mantine/core'
+import { Button, Group, Paper, Table, Title } from '@mantine/core'
 import { IconCircleCheck, IconCircleX } from '@tabler/icons'
 import axios from 'axios'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import React from 'react'
@@ -22,9 +23,12 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     }
   }
 
-  const usersResponse = await axios.get('http://localhost:5000/users', {
-    headers: { Authorization: `Bearer ${token}` },
-  })
+  const usersResponse = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/users`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  )
 
   const users: [User & { customer: Customer; employee: Employee }] =
     usersResponse.data
@@ -67,7 +71,12 @@ const UsersPage = ({
 
   return (
     <div>
-      <Title>Usuarios</Title>
+      <Group position='apart'>
+        <Title>Usuarios</Title>
+        <Link href='/admin/users/create' passHref>
+          <Button component='a'>Criar Usuario</Button>
+        </Link>
+      </Group>
       <Paper withBorder shadow='md' p='md' mt='md' radius='md'>
         <Table highlightOnHover>
           <thead>

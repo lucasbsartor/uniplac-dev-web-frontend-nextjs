@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
 ) => {
   const { id } = ctx.query
   const productResponse = await axios.get(
-    `http://localhost:5000/products/${id}`
+    `${process.env.NEXT_PUBLIC_API_URL}/products/${id}`
   )
   const product: Product = productResponse.data
 
@@ -65,7 +65,7 @@ const ProductPage = ({
 
       <Grid.Col span={4}>
         <Image
-          src={`http://localhost:5000/images/${data.product.picture}`}
+          src={`${process.env.NEXT_PUBLIC_API_URL_FRONT}/images/${data.product.picture}`}
           alt='Product picture'
         />
       </Grid.Col>

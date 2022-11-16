@@ -5,24 +5,18 @@ import {
   Paper,
   TextInput,
   PasswordInput,
-  Group,
   Button,
   Text,
   Stack,
 } from '@mantine/core'
 import Link from 'next/link'
 import { NextPage } from 'next'
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { AuthContext } from '../../contexts/AuthContext'
 import { useForm } from '@mantine/form'
 
 const RegisterPage: NextPage = () => {
   const { signUp } = useContext(AuthContext)
-  const [email, setEmail] = useState('')
-  const [cpf, setCpf] = useState('')
-  const [name, setName] = useState('')
-  const [password, setPassword] = useState('')
-  const [phone, setPhone] = useState('')
 
   const form = useForm({
     initialValues: {
@@ -49,7 +43,6 @@ const RegisterPage: NextPage = () => {
       password: form.values.password,
       phone: form.values.phone,
     }
-    console.log(signUpData)
     signUp(signUpData)
   }
 

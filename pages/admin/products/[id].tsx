@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
   const { id } = ctx.query
 
   const productResponse = await axios.get(
-    `http://localhost:5000/products/${id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/products/${id}`,
     { headers: { Authorization: `Bearer ${token}` } }
   )
 
@@ -84,7 +84,7 @@ const AdminProductPage = ({
 
       form.values.picture && imageFormData.append('file', form.values.picture)
       const imageUploadResponse = await axios.post(
-        'http://localhost:5000/images',
+        `${process.env.NEXT_PUBLIC_API_URL_FRONT}/images`,
         imageFormData,
         {
           headers: {
@@ -101,7 +101,7 @@ const AdminProductPage = ({
         price: form.values.price,
       }
       await axios.patch(
-        `http://localhost:5000/products/${data.product.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL_FRONT}/products/${data.product.id}`,
         payload,
         {
           headers: {
@@ -130,11 +130,14 @@ const AdminProductPage = ({
     try {
       setLoading(true)
       const { ['uniplacdevweb.token']: token } = parseCookies()
-      await axios.delete(`http://localhost:5000/products/${data.product.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL_FRONT}/products/${data.product.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       setLoading(false)
       showNotification({
         title: 'Produto removido',
@@ -191,7 +194,7 @@ const AdminProductPage = ({
                       src={
                         form.values.picture instanceof Blob
                           ? URL.createObjectURL(form.values.picture)
-                          : `http://localhost:5000/images/${data.product.picture}`
+                          : `${process.env.NEXT_PUBLIC_API_URL_FRONT}/images/${data.product.picture}`
                       }
                       alt=''
                     />

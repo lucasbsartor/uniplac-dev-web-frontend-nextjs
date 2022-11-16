@@ -13,7 +13,9 @@ type Data = {
 export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
   ctx
 ) => {
-  const productsResponse = await axios.get('http://localhost:5000/products')
+  const productsResponse = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/products`
+  )
 
   const products: [Product] = productsResponse.data
 

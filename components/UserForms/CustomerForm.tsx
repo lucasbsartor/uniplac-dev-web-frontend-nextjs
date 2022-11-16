@@ -36,7 +36,7 @@ const CustomerForm = (props: CustomerFormProps) => {
       }
       const { ['uniplacdevweb.token']: token } = parseCookies()
       await axios.patch(
-        `http://localhost:5000/customers/${props.customerId}`,
+        `${process.env.NEXT_PUBLIC_API_URL_FRONT}/customers/${props.customerId}`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       )

@@ -68,9 +68,13 @@ const UserForm = (props: UserFormProps) => {
       }
       const { ['uniplacdevweb.token']: token } = parseCookies()
       setLoading(true)
-      await axios.patch(`http://localhost:5000/users/${props.id}`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL_FRONT}/users/${props.id}`,
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       setLoading(false)
       refreshUserInfo()
       showNotification({

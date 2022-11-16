@@ -1,7 +1,39 @@
-import type { NextPage } from 'next'
+import { Title, Grid } from '@mantine/core'
+import axios from 'axios'
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from 'next'
 import { HeroText } from '../components/Home/Hero'
+import ProductCard from '../components/Products/ProductCard'
+import { Product } from '../libs/types'
 
-const Home: NextPage = () => {
+type Data = {
+  products: [Product]
+}
+
+export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
+  ctx
+) => {
+  const productsResponse = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/products`
+  )
+
+  const products: [Product] = productsResponse.data
+
+  return {
+    props: {
+      data: {
+        products,
+      },
+    },
+  }
+}
+
+const Home = ({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <div>
       {/* <Head>
@@ -11,10 +43,15 @@ const Home: NextPage = () => {
       </Head> */}
 
       <main>
-        <HeroText />
+        <Title>Produtos</Title>
+        <Grid mt='md'>
+          {data.products.map((product) => (
+            <Grid.Col key={product.id} span={4}>
+              <ProductCard product={product} />
+            </Grid.Col>
+          ))}
+        </Grid>
       </main>
-
-      <footer></footer>
     </div>
   )
 }

@@ -49,7 +49,7 @@ const CreateProductPage = () => {
 
       form.values.picture && imageFormData.append('file', form.values.picture)
       const imageUploadResponse = await axios.post(
-        'http://localhost:5000/images',
+        `${process.env.NEXT_PUBLIC_API_URL_FRONT}/images`,
         imageFormData,
         {
           headers: {
@@ -65,11 +65,15 @@ const CreateProductPage = () => {
         price: form.values.price,
       }
 
-      await axios.post('http://localhost:5000/products', payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL_FRONT}/products`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       setLoading(false)
       showNotification({
         title: 'Produto criado',

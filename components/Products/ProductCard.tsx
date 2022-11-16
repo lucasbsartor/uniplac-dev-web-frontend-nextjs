@@ -23,7 +23,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <Card shadow='sm' p='lg' radius='md' withBorder component='a'>
         <Card.Section>
           <Image
-            src={`http://localhost:5000/images/${product.picture}`}
+            src={`${process.env.NEXT_PUBLIC_API_URL_FRONT}/images/${product.picture}`}
             height={160}
             alt='Foto do produto'
           />

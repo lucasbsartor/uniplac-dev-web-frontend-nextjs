@@ -27,9 +27,12 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
   const { id } = ctx.query
 
   try {
-    const userResponse = await axios.get(`http://localhost:5000/users/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    const userResponse = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/${id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
     const user: User & { customer: Customer; employee: Employee } =
       userResponse.data
     console.log(user)
