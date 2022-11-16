@@ -46,6 +46,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setCookie(undefined, 'uniplacdevweb.token', token, {
         maxAge: 60 * 60 * 24,
         sameSite: true,
+        path: '/',
       })
       setUser(user)
       showNotification({
@@ -66,6 +67,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setCookie(undefined, 'uniplacdevweb.token', token, {
         maxAge: 60 * 60 * 24,
         sameSite: true,
+        path: '/',
       })
       setUser(user)
       showNotification({
@@ -81,7 +83,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function signOut() {
     try {
-      destroyCookie(undefined, 'uniplacdevweb.token', { sameSite: true })
+      destroyCookie(undefined, 'uniplacdevweb.token', {
+        sameSite: true,
+        path: '/',
+      })
       setUser(null)
       router.push('/auth/login')
     } catch (error: any) {
