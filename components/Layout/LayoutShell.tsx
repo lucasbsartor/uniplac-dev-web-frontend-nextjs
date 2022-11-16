@@ -8,10 +8,15 @@ import {
   Text,
   Button,
   Container,
+  ScrollArea,
+  Divider,
 } from '@mantine/core'
 import Link from 'next/link'
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../contexts/AuthContext'
+import AdminNavLinks from './AdminNavLinks'
+import UserNavLinks from './UserNavLinks'
+import UserProfilebutton from './UserProfileButton'
 
 type LayoutShellProps = {
   children: React.ReactNode
@@ -20,7 +25,7 @@ type LayoutShellProps = {
 const LayoutShell = ({ children }: LayoutShellProps) => {
   const theme = useMantineTheme()
   const [opened, setOpened] = useState(false)
-  const { isAuthenticated, signOut } = useContext(AuthContext)
+  const { isAuthenticated, signOut, user } = useContext(AuthContext)
   return (
     <AppShell
       styles={{
@@ -41,10 +46,20 @@ const LayoutShell = ({ children }: LayoutShellProps) => {
             hidden={!opened}
             width={{ sm: 200, lg: 300 }}
           >
-            <Text>Application navbar</Text>
-            <Link href='/users' passHref>
-              <Button component='a'>Users</Button>
-            </Link>
+            <Navbar.Section grow component={ScrollArea}>
+              {user?.employee ? <AdminNavLinks /> : undefined}
+              <UserNavLinks />
+            </Navbar.Section>
+            <Navbar.Section>
+              <Divider mb='xs' />
+              {user && (
+                <UserProfilebutton
+                  image={undefined}
+                  email={user.email}
+                  name={user.name}
+                />
+              )}
+            </Navbar.Section>
           </Navbar>
         ) : undefined
       }

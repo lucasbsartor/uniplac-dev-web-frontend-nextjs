@@ -21,6 +21,7 @@ type AuthContextType = {
   signIn: (data: SignInRequestDataType) => Promise<void>
   signUp: (data: SignUpRequestDataType) => Promise<void>
   signOut: () => void
+  refreshUserInfo: () => Promise<void>
 }
 
 export const AuthContext = createContext({} as AuthContextType)
@@ -88,9 +89,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function refreshUserInfo() {
+    const { 'uniplacdevweb.token': token } = parseCookies()
+
+    const user = await getUserInfo(token)
+    setUser(user)
+  }
+
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, user, signIn, signUp, signOut }}
+      value={{
+        isAuthenticated,
+        user,
+        signIn,
+        signUp,
+        signOut,
+        refreshUserInfo,
+      }}
     >
       {children}
     </AuthContext.Provider>

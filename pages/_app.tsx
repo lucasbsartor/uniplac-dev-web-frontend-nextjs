@@ -4,6 +4,7 @@ import { MantineProvider } from '@mantine/core'
 import LayoutShell from '../components/Layout/LayoutShell'
 import { NotificationsProvider } from '@mantine/notifications'
 import { AuthProvider } from '../contexts/AuthContext'
+import { ModalsProvider } from '@mantine/modals'
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props
@@ -27,11 +28,13 @@ export default function App(props: AppProps) {
         }}
       >
         <NotificationsProvider>
-          <AuthProvider>
-            <LayoutShell>
-              <Component {...pageProps} />
-            </LayoutShell>
-          </AuthProvider>
+          <ModalsProvider>
+            <AuthProvider>
+              <LayoutShell>
+                <Component {...pageProps} />
+              </LayoutShell>
+            </AuthProvider>
+          </ModalsProvider>
         </NotificationsProvider>
       </MantineProvider>
     </>

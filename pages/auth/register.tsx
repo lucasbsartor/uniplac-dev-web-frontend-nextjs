@@ -14,6 +14,7 @@ import Link from 'next/link'
 import { NextPage } from 'next'
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../contexts/AuthContext'
+import { useForm } from '@mantine/form'
 
 const RegisterPage: NextPage = () => {
   const { signUp } = useContext(AuthContext)
@@ -23,13 +24,30 @@ const RegisterPage: NextPage = () => {
   const [password, setPassword] = useState('')
   const [phone, setPhone] = useState('')
 
+  const form = useForm({
+    initialValues: {
+      email: '',
+      cpf: '',
+      name: '',
+      phone: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validate: {
+      confirmPassword: (value, values) =>
+        value.trim() === values.password.trim()
+          ? null
+          : 'Senhas devem ser iguais',
+    },
+  })
+
   const handleSubmit = () => {
     const signUpData = {
-      email,
-      cpf,
-      name,
-      password,
-      phone,
+      email: form.values.email,
+      cpf: form.values.cpf,
+      name: form.values.name,
+      password: form.values.password,
+      phone: form.values.phone,
     }
     console.log(signUpData)
     signUp(signUpData)
@@ -56,57 +74,50 @@ const RegisterPage: NextPage = () => {
           </Link>
         </Text>
 
-        <Paper withBorder shadow='md' p={30} mt={30} radius='md'>
-          <Stack>
-            <TextInput
-              label='Email'
-              placeholder='seu@email.com'
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <TextInput
-              label='CPF'
-              placeholder='1234567890'
-              onChange={(e) => setCpf(e.target.value)}
-              required
-            />
-            <TextInput
-              label='Nome'
-              placeholder='Seu nome'
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-            <TextInput
-              label='Telefone'
-              placeholder='(xx) xxxxxxxxx'
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
-            <PasswordInput
-              label='Senha'
-              placeholder='Sua senha'
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </Stack>
-          {/* <PasswordInput
-            label='Confirme sua senha'
-            placeholder='Repita a sua senha'
-            required
-          /> */}
-          <Group position='apart' mt='md'>
-            {/* <Checkbox label='Manter conectado' /> */}
-            <Anchor<'a'>
-              onClick={(event) => event.preventDefault()}
-              href='#'
-              size='sm'
-            >
-              Esqueceu sua senha?
-            </Anchor>
-          </Group>
-          <Button fullWidth mt='xl' onClick={handleSubmit}>
-            Criar
-          </Button>
+        <Paper withBorder shadow='md' p='md' mt={30} radius='md'>
+          <form onSubmit={form.onSubmit(handleSubmit)}>
+            <Stack>
+              <TextInput
+                label='Email'
+                placeholder='seu@email.com'
+                required
+                {...form.getInputProps('email')}
+              />
+              <TextInput
+                label='CPF'
+                placeholder='1234567890'
+                required
+                {...form.getInputProps('cpf')}
+              />
+              <TextInput
+                label='Nome'
+                placeholder='Seu nome'
+                required
+                {...form.getInputProps('name')}
+              />
+              <TextInput
+                label='Telefone'
+                placeholder='(xx) xxxxxxxxx'
+                required
+                {...form.getInputProps('phone')}
+              />
+              <PasswordInput
+                label='Senha'
+                placeholder='Sua senha'
+                required
+                {...form.getInputProps('password')}
+              />
+              <PasswordInput
+                label='Confirme sua senha'
+                placeholder='Repita a sua senha'
+                required
+                {...form.getInputProps('confirmPassword')}
+              />
+              <Button fullWidth type='submit'>
+                Criar
+              </Button>
+            </Stack>
+          </form>
         </Paper>
       </Container>
     </div>

@@ -3,7 +3,6 @@ export type User = {
   email: string
   cpf: string
   name: string
-  password: string
   phone: string | null
   createdAt: Date
   updatedAt: Date
@@ -25,4 +24,24 @@ export type Customer = {
   userId: number
   createdAt: Date
   updatedAt: Date
+}
+
+export type Product = {
+  id: number
+  name: string
+  description: string
+  picture: string
+  price: number
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type ImageUploadResponse = {
+  fieldname: string
+  originalname: string
+  mimetype: string
+  destination: string
+  filename: string
+  path: string
+  size: number
 }

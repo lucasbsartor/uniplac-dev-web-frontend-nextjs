@@ -5,11 +5,10 @@ import {
   Paper,
   TextInput,
   PasswordInput,
-  Group,
-  Checkbox,
   Button,
   Text,
 } from '@mantine/core'
+import { useForm } from '@mantine/form'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import React, { useContext, useState } from 'react'
@@ -59,8 +58,8 @@ const LoginPage: NextPage = () => {
             mt='md'
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Group position='apart' mt='md'>
-            {/* <Checkbox label='Manter conectado' /> */}
+          {/* <Group position='apart' mt='md'>
+            <Checkbox label='Manter conectado' />
             <Anchor<'a'>
               onClick={(event) => event.preventDefault()}
               href='#'
@@ -68,7 +67,7 @@ const LoginPage: NextPage = () => {
             >
               Esqueceu sua senha?
             </Anchor>
-          </Group>
+          </Group> */}
           <Button fullWidth mt='xl' onClick={handleLogin}>
             Login
           </Button>
