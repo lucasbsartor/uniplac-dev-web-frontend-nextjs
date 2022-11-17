@@ -1,12 +1,16 @@
-import { Title, Paper, Divider } from '@mantine/core'
+import { Title, Paper, Divider, Button, Group } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
 import axios from 'axios'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
-import React from 'react'
+import React, { useContext, useState } from 'react'
+import { useStore } from 'zustand'
 import CreateEmployeeModal from '../../../components/UserForms/CreateEmployeeModal'
 import CustomerForm from '../../../components/UserForms/CustomerForm'
 import EmployeeForm from '../../../components/UserForms/EmployeeForm'
 import UserForm from '../../../components/UserForms/UserForm'
+import { AuthContext } from '../../../contexts/AuthContext'
 import { Customer, Employee, User } from '../../../libs/types'
 
 type Data = {
@@ -56,9 +60,39 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
 const CustomerPage = ({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const { user } = useContext(AuthContext)
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true)
+      const { ['uniplacdevweb.token']: token } = parseCookies()
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL_FRONT}/users/${data.user.id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      setLoading(false)
+      showNotification({
+        title: 'Usuario removido',
+        message: `Usuario ${data.user.name} removido com sucesso`,
+      })
+      router.push('/admin/users')
+    } catch (error: any) {
+      setLoading(false)
+      showNotification({ title: 'Deu ruim', message: error.message })
+    }
+  }
   return (
     <div>
-      <Title>{data.user.name}</Title>
+      <Group position='apart'>
+        <Title>{data.user.name}</Title>
+        {user?.id === data.user.id ? undefined : (
+          <Button color='red' loading={loading} onClick={handleDelete}>
+            Deletar
+          </Button>
+        )}
+      </Group>
       <Paper withBorder shadow='md' p='md' mt='md' radius='md'>
         <Title order={3} mb='md'>
           Informações do Usuário
